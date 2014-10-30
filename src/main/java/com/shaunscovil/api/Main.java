@@ -9,7 +9,7 @@ import java.net.URI;
 
 public class Main {
 
-    public static final String BASE_URI = "http://api.shaunscovil.com/";
+    public static final String BASE_URI = "http://api.shaunscovil.com:8080/";
 
     public static HttpServer startServer() {
         final ResourceConfig rc = new ResourceConfig().packages("com.shaunscovil.api");

@@ -1,9 +1,10 @@
-package com.shaunscovil.api;
+package com.shaunscovil.api.objects;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 
+import com.shaunscovil.api.Main;
 import org.glassfish.grizzly.http.server.HttpServer;
 
 import org.glassfish.jersey.moxy.json.MoxyJsonFeature;
@@ -12,7 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
-public class ObjectResourceTest {
+public class ObjectsResourceTest {
 
     private HttpServer server;
     private Client client;
@@ -34,7 +35,7 @@ public class ObjectResourceTest {
 
     @Test
     public void testGetIt() {
-        String responseMsg = target.path("object").request().get(String.class);
+        String responseMsg = target.path("objects/test").request().get(String.class);
         assertEquals("Got it!", responseMsg);
     }
 
