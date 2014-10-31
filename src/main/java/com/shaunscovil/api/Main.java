@@ -1,15 +1,19 @@
 package com.shaunscovil.api;
 
+import com.shaunscovil.api.data.MongoDB;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Properties;
 
 public class Main {
 
-    public static final String BASE_URI = "http://api.shaunscovil.com:8080/";
+    public static final Properties PROPERTIES = Configuration.getProperties(Environment.DEVELOPMENT);
+
+    public static final String BASE_URI = PROPERTIES.getProperty(Property.BASE_URI.key());
 
     public static HttpServer startServer() {
         final ResourceConfig rc = new ResourceConfig().packages("com.shaunscovil.api");
@@ -18,6 +22,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         final HttpServer server = startServer();
+        MongoDB.getInstance();
         System.in.read();
         server.shutdownNow();
     }
