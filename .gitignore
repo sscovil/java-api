@@ -1,3 +1,4 @@
 .idea/
 target/
 api-shaunscovil.conf
+dependency-reduced-pom.xml
