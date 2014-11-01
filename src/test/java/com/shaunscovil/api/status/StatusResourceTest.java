@@ -1,6 +1,6 @@
 package com.shaunscovil.api.status;
 
-import com.shaunscovil.api.Main;
+import com.shaunscovil.api.APIServer;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.junit.After;
 import org.junit.Before;
@@ -23,9 +23,9 @@ public class StatusResourceTest {
 
     @Before
     public void setUp() throws Exception {
-        this.server = Main.startServer();
+        this.server = APIServer.startServer();
         this.client = ClientBuilder.newClient();
-        this.target = client.target(Main.BASE_URI);
+        this.target = client.target(APIServer.BASE_URI);
     }
 
     @After
