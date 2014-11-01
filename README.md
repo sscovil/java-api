@@ -5,7 +5,7 @@ A RESTful API, designed for performing basic CRUD operations on dynamic JSON obj
 _Copyright 2014 Shaun Scovil_
 
 
-## Ingredients
+### Ingredients
 
 This project was developed with __Java 1.7__, using __Maven 3.2.3__ and the __Jersey Maven archetype__:
 
@@ -22,7 +22,7 @@ It has the following dependencies, included in the JAR thanks to the __Shade Mav
 * Mockito 1.10.8
 
 
-## Getting Started
+### Getting Started
 
 In order to run this API, you will need to do the following (more detailed instructions below):
 
@@ -119,7 +119,7 @@ $ sudo service rest-api start
 ```
 
 
-## TODO
+### TODO
 
 This is a hobby project that I intend to continue working on in my abundance of spare time (he said sarcastically). Here are some things I would like to do next:
 
