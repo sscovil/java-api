@@ -12,9 +12,21 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         try {
-            final HttpServer server = APIServer.startServer();
             initializeDB();
-            Daemon.run(server);
+            HttpServer server = Server.start();
+
+            try {
+                Object lock = new Object();
+                synchronized (lock) {
+                    while (true) {
+                        lock.wait();
+                    }
+                }
+            }
+            catch (InterruptedException e) {
+                System.out.print("Service interrupted, shutting down now");
+                server.shutdownNow();
+            }
         }
         catch (Exception e) {
             throw new RuntimeException("Could not start server", e);

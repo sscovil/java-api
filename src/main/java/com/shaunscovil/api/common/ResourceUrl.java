@@ -1,6 +1,6 @@
 package com.shaunscovil.api.common;
 
-import com.shaunscovil.api.APIServer;
+import com.shaunscovil.api.Server;
 
 public class ResourceUrl {
 
@@ -8,7 +8,7 @@ public class ResourceUrl {
 
     public ResourceUrl(String resourceUid, String resourcePath) {
         this.url = String.format("%s/%s/%s",
-                APIServer.BASE_URI,
+                Server.BASE_URI,
                 resourcePath,
                 resourceUid
         );
