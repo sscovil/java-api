@@ -108,7 +108,7 @@ expect fork
 script
     cd /var/www/API
     java -jar /var/www/API/target/shaunscovil-api-1.0.0-SNAPSHOT.jar USERNAME >/var/log/api-shaunscovil.log 2>&1
-    emit api-shaunscovil_running
+    emit rest-api_running
 end script
 ```
 
