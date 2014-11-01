@@ -2,7 +2,7 @@
 
 A RESTful API, designed for performing basic CRUD operations on dynamic JSON objects.
 
-Copyright 2014 Shaun Scovil
+_Copyright 2014 Shaun Scovil_
 
 
 ## Ingredients
@@ -13,23 +13,23 @@ This project was developed with __Java 1.7__, using __Maven 3.2.3__ and the __Je
 * Group ID: `org.glassfish.jersey.archetypes`
 * Version: `2.13`
 
-It has the following dependencies, all of which are included in the JAR thanks to the __Shade Maven plugin__:
+It has the following dependencies, included in the JAR thanks to the __Shade Maven plugin__:
 
-* Grizzly HTTP Server v2.3.16
-* Jackson FasterXML v2.4.3
-* MongoDB driver v2.12.4
-* JUnit v4.9
-* Mockito v1.10.8
+* Grizzly HTTP Server 2.3.16
+* Jackson FasterXML 2.4.3
+* MongoDB driver 2.12.4
+* JUnit 4.9
+* Mockito 1.10.8
 
 
 ## Getting Started
 
-In order to run this API, you will need to do the following (for more detailed instructions, keep reading):
+In order to run this API, you will need to do the following (more detailed instructions below):
 
-* Clone this repository
-* Configure the application
-* Set the environment to DEVELOPMENT, STAGING or PRODUCTION
-* Run the Maven build script
+1. Clone this repository
+2. Configure the application
+3. Set the environment to DEVELOPMENT, STAGING or PRODUCTION
+4. Run the Maven build script
 
 Following those steps will generate a fat JAR that contains the API and all of it's dependencies.
 
