@@ -124,7 +124,8 @@ $ sudo service rest-api start
 This is a hobby project that I intend to continue working on in my abundance of spare time (he said sarcastically). Here are some things I would like to do next:
 
 * __Logging.__ I included `log4j` as a Maven dependency, but am considering alternatives and haven't decided how I want to handle logging yet.
-* __Testing.__ You can never have too many tests. Right now, I don't have enough. I definitely want to add code coverage for the data layer and common classes.
+* __Unit Testing.__ You can never have too many tests. Right now, I don't have enough. I definitely want to add code coverage for the data layer and common classes.
 * __Load Testing.__ The HTTP server has not been configured or optimized in any way, and I have not yet begun to beat on this thing to see how it handles concurrent requests.
 * __Authentication.__ Hello, world! I want to add support for Basic Auth, at the very least.
-* __Interfaces.__ As it stands, the data layer is pretty tightly coupled to MongoDB. I want to program the DAO to an interface, making it easier to swap or use multiple DBMSs.
+* __Pagination.__ Right now, there is no upper limit to the number of results the `/api/read` endpoint returns. That could get messy.
+* __Advanced Querys.__ It would be really cool to enable users to query for objects that meet specific criteria (i.e. read filters).

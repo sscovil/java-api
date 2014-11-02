@@ -1,6 +1,7 @@
 package com.shaunscovil.api.objects;
 
 import com.shaunscovil.api.common.ResourceUrl;
+import com.shaunscovil.api.data.DAO;
 import com.shaunscovil.api.data.MongoDAO;
 
 import java.util.List;
@@ -10,13 +11,13 @@ public class ObjectService {
 
     protected static final String COLLECTION_NAME = "objects";
 
-    protected MongoDAO dao;
+    protected DAO dao;
 
     public ObjectService() {
         this.dao = new MongoDAO(COLLECTION_NAME);
     }
 
-    public ObjectService(MongoDAO dao) {
+    public ObjectService(DAO dao) {
         this.dao = dao;
     }
 

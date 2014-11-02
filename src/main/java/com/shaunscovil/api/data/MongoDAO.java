@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MongoDAO {
+public class MongoDAO implements DAO {
 
     protected DBCollection collection;
 
@@ -24,12 +24,12 @@ public class MongoDAO {
         DBObject entity = new BasicDBObject(model);
         collection.insert(entity);
 
-        return buildResponse(entity);
+        return mapModel(entity);
     }
 
     public Map<String, Object> update(Map<String, Object> model) {
         String uid = model.get("uid").toString();
-        ObjectId objectId = stringToObjectId(uid);
+        ObjectId objectId = mapObjectId(uid);
         DBObject query = collection.findOne(objectId);
         handleNotFound(query);
         DBObject entity = new BasicDBObject("_id", objectId);
@@ -37,15 +37,15 @@ public class MongoDAO {
         entity.removeField("uid");
         collection.update(query, entity);
 
-        return buildResponse(entity);
+        return mapModel(entity);
     }
 
     public Map<String, Object> read(String uid) {
-        ObjectId objectId = stringToObjectId(uid);
+        ObjectId objectId = mapObjectId(uid);
         DBObject entity = collection.findOne(objectId);
         handleNotFound(entity);
 
-        return buildResponse(entity);
+        return mapModel(entity);
     }
 
     public List<ResourceUrl> readResourceUrls(String resourcePath) {
@@ -67,20 +67,9 @@ public class MongoDAO {
     }
 
     public void delete(String uid) {
-        ObjectId objectId = stringToObjectId(uid);
+        ObjectId objectId = mapObjectId(uid);
         DBObject query = new BasicDBObject("_id", objectId);
         collection.remove(query);
-    }
-
-    @SuppressWarnings("unchecked")
-    protected Map<String, Object> buildResponse(DBObject entity) {
-        String uid = entity.get("_id").toString();
-        Map<String, Object> response = new HashMap<>();
-        response.put("uid", uid);
-        response.putAll(entity.toMap());
-        response.remove("_id");
-
-        return response;
     }
 
     protected void handleNotFound(DBObject entity) {
@@ -93,7 +82,18 @@ public class MongoDAO {
             throw new ApiException("No records found", Response.Status.NOT_FOUND);
     }
 
-    protected ObjectId stringToObjectId(String uid) {
+    @SuppressWarnings("unchecked")
+    protected Map<String, Object> mapModel(DBObject entity) {
+        String uid = entity.get("_id").toString();
+        Map<String, Object> response = new HashMap<>();
+        response.put("uid", uid);
+        response.putAll(entity.toMap());
+        response.remove("_id");
+
+        return response;
+    }
+
+    protected ObjectId mapObjectId(String uid) {
         try {
             return new ObjectId(uid);
         }
