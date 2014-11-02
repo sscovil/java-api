@@ -1,51 +1,59 @@
-package com.shaunscovil.api.data;
+package com.shaunscovil.api.data.mongodb;
 
 import com.mongodb.*;
 import com.shaunscovil.api.common.ResourceUrl;
+import com.shaunscovil.api.data.DAO;
 import com.shaunscovil.api.exception.ApiException;
 import org.bson.types.ObjectId;
 
 import javax.ws.rs.core.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MongoDAO implements DAO {
+public class MongoDAO<Type> implements DAO<Type> {
 
     protected DBCollection collection;
+
+    protected MongoMapper<Type> mapper;
 
     public MongoDAO(String collectionName) {
         DB database = MongoDB.getDatabase();
         this.collection = database.getCollection(collectionName);
+        this.mapper = new MongoMapper<>();
     }
 
-    public Map<String, Object> create(Map<String, Object> model) {
-        DBObject entity = new BasicDBObject(model);
+    public MongoDAO(DBCollection collection, MongoMapper<Type> mapper) {
+        this.collection = collection;
+        this.mapper = mapper;
+    }
+
+    public Map<String, Object> create(Type model) {
+        DBObject entity = mapper.mapEntity(model);
+        entity.removeField("_id");
         collection.insert(entity);
 
-        return mapModel(entity);
+        return mapper.mapResponse(entity);
     }
 
-    public Map<String, Object> update(Map<String, Object> model) {
-        String uid = model.get("uid").toString();
-        ObjectId objectId = mapObjectId(uid);
+    public Map<String, Object> update(Object uid, Type model) {
+        ObjectId objectId = mapper.mapObjectId(uid);
         DBObject query = collection.findOne(objectId);
         handleNotFound(query);
-        DBObject entity = new BasicDBObject("_id", objectId);
-        entity.putAll(model);
+        DBObject entity = mapper.mapEntity(model);
+        entity.put("_id", objectId);
         entity.removeField("uid");
         collection.update(query, entity);
 
-        return mapModel(entity);
+        return mapper.mapResponse(entity);
     }
 
-    public Map<String, Object> read(String uid) {
-        ObjectId objectId = mapObjectId(uid);
+    public Map<String, Object> read(Object uid) {
+        ObjectId objectId = mapper.mapObjectId(uid);
         DBObject entity = collection.findOne(objectId);
         handleNotFound(entity);
 
-        return mapModel(entity);
+        return mapper.mapResponse(entity);
     }
 
     public List<ResourceUrl> readResourceUrls(String resourcePath) {
@@ -66,8 +74,8 @@ public class MongoDAO implements DAO {
         return response;
     }
 
-    public void delete(String uid) {
-        ObjectId objectId = mapObjectId(uid);
+    public void delete(Object uid) {
+        ObjectId objectId = mapper.mapObjectId(uid);
         DBObject query = new BasicDBObject("_id", objectId);
         collection.remove(query);
     }
@@ -80,26 +88,6 @@ public class MongoDAO implements DAO {
     protected void handleNotFound(DBCursor cursor) {
         if (!cursor.hasNext())
             throw new ApiException("No records found", Response.Status.NOT_FOUND);
-    }
-
-    @SuppressWarnings("unchecked")
-    protected Map<String, Object> mapModel(DBObject entity) {
-        String uid = entity.get("_id").toString();
-        Map<String, Object> response = new HashMap<>();
-        response.put("uid", uid);
-        response.putAll(entity.toMap());
-        response.remove("_id");
-
-        return response;
-    }
-
-    protected ObjectId mapObjectId(String uid) {
-        try {
-            return new ObjectId(uid);
-        }
-        catch (IllegalArgumentException e) {
-            throw new ApiException(String.format("'%s' is not a valid UID", uid), Response.Status.BAD_REQUEST);
-        }
     }
 
 }

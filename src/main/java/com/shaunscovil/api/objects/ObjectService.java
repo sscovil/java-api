@@ -2,7 +2,7 @@ package com.shaunscovil.api.objects;
 
 import com.shaunscovil.api.common.ResourceUrl;
 import com.shaunscovil.api.data.DAO;
-import com.shaunscovil.api.data.MongoDAO;
+import com.shaunscovil.api.data.mongodb.MongoDAO;
 
 import java.util.List;
 import java.util.Map;
@@ -11,24 +11,22 @@ public class ObjectService {
 
     protected static final String COLLECTION_NAME = "objects";
 
-    protected DAO dao;
+    protected DAO<Map> dao;
 
     public ObjectService() {
-        this.dao = new MongoDAO(COLLECTION_NAME);
+        this.dao = new MongoDAO<>(COLLECTION_NAME);
     }
 
-    public ObjectService(DAO dao) {
+    public ObjectService(DAO<Map> dao) {
         this.dao = dao;
     }
 
-    public Map<String, Object> create(Map<String, Object> model) {
-        model.remove("uid");
+    public Map<String, Object> create(Map model) {
         return dao.create(model);
     }
 
-    public Map<String, Object> update(String uid, Map<String, Object> model) {
-        model.put("uid", uid);
-        return dao.update(model);
+    public Map<String, Object> update(String uid, Map model) {
+        return dao.update(uid, model);
     }
 
     public Map<String, Object> read(String uid) {

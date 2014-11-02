@@ -4,21 +4,28 @@ import com.shaunscovil.api.common.JsonUtility;
 import com.shaunscovil.api.common.ResourceUrl;
 import com.shaunscovil.api.exception.ApiException;
 import org.bson.types.ObjectId;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRule;
 
-import java.util.Arrays;
-import java.util.List;
+import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyMapOf;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 public class ObjectResourceTest {
+
+    public static final String JSON_PAYLOAD = "{ \"foo\": \"bar\" }";
+
+    public static final String MALFORMED_JSON_PAYLOAD = "{ foo: bar }";
+
+    public ObjectResource resource;
 
     @Rule
     public MockitoJUnitRule mockitoJUnitRule = new MockitoJUnitRule(this);
@@ -27,75 +34,84 @@ public class ObjectResourceTest {
     public ObjectService serviceMock;
 
     @Mock
-    public Map<String, Object> modelMock;
+    public ObjectId objectIdMock;
 
     @Mock
-    public ObjectId objectIdMock;
+    public Map<String, Object> responseMock;
+
+    @Mock
+    public ArrayList<ResourceUrl> resourceUrlsMock;
+
+    @Before
+    public void setUp() throws Exception {
+        this.resource = new ObjectResource(serviceMock);
+        this.responseMock.put("uid", objectIdMock.toString());
+        this.responseMock.put("foo", "bar");
+        this.resourceUrlsMock.add(new ResourceUrl("UID", "PATH"));
+    }
 
     @Test
     public void createSucceeds() {
-        ObjectResource resource = new ObjectResource(serviceMock);
-        when(serviceMock.create(anyMapOf(String.class, Object.class))).thenReturn(modelMock);
-        String jsonPayload = "{ \"foo\": \"bar\" }";
-        String actualResponse = resource.create(jsonPayload);
-        String expectedResponse = JsonUtility.serializeJson(modelMock);
-        assertEquals(expectedResponse, actualResponse);
+        when(serviceMock.create(anyMap())).thenReturn(responseMock);
+        String response = resource.create(JSON_PAYLOAD);
+        String expected = JsonUtility.serializeJson(responseMock);
+        assertEquals(expected, response);
     }
 
-    @Test(expected = ApiException.class)
+    @Test
     public void createFailsInvalidJson() {
-        ObjectResource resource = new ObjectResource(serviceMock);
-        when(serviceMock.create(anyMapOf(String.class, Object.class))).thenReturn(modelMock);
-        String malformedJsonPayload = "{ foo: bar }";
-        resource.create(malformedJsonPayload);
+        when(serviceMock.create(anyMap())).thenReturn(responseMock);
+        try {
+            resource.create(MALFORMED_JSON_PAYLOAD);
+            fail("ApiException not thrown");
+        }
+        catch (ApiException e) {
+            assertEquals(JsonUtility.DESERIALIZATION_ERROR_MESSAGE, e.getMessage());
+            assertEquals(Response.Status.BAD_REQUEST, e.getStatus());
+        }
     }
 
     @Test
     public void updateSucceeds() {
-        ObjectResource resource = new ObjectResource(serviceMock);
-        when(serviceMock.update(anyString(), anyMapOf(String.class, Object.class))).thenReturn(modelMock);
-        String uid = objectIdMock.toString();
-        String jsonPayload = "{ \"foo\": \"bar\" }";
-        String actualResponse = resource.update(uid, jsonPayload);
-        String expectedResponse = JsonUtility.serializeJson(modelMock);
-        assertEquals(expectedResponse, actualResponse);
+        when(serviceMock.update(anyString(), anyMap())).thenReturn(responseMock);
+        String response = resource.update(objectIdMock.toString(), JSON_PAYLOAD);
+        String expected = JsonUtility.serializeJson(responseMock);
+        assertEquals(expected, response);
     }
 
-    @Test(expected = ApiException.class)
+    @Test
     public void updateFailsInvalidJson() {
-        ObjectResource resource = new ObjectResource(serviceMock);
-        when(serviceMock.update(anyString(), anyMapOf(String.class, Object.class))).thenReturn(modelMock);
-        String uid = objectIdMock.toString();
-        String malformedJsonPayload = "{ foo: bar }";
-        resource.update(uid, malformedJsonPayload);
+        when(serviceMock.update(anyString(), anyMap())).thenReturn(responseMock);
+        try {
+            resource.update(objectIdMock.toString(), MALFORMED_JSON_PAYLOAD);
+            fail("ApiException not thrown");
+        }
+        catch (ApiException e) {
+            assertEquals(JsonUtility.DESERIALIZATION_ERROR_MESSAGE, e.getMessage());
+            assertEquals(Response.Status.BAD_REQUEST, e.getStatus());
+        }
     }
 
     @Test
     public void readSucceeds() {
-        ObjectResource resource = new ObjectResource(serviceMock);
-        when(serviceMock.read(anyString())).thenReturn(modelMock);
-        String uid = objectIdMock.toString();
-        String actualResponse = resource.read(uid);
-        String expectedResponse = JsonUtility.serializeJson(modelMock);
-        assertEquals(expectedResponse, actualResponse);
+        when(serviceMock.read(anyString())).thenReturn(responseMock);
+        String response = resource.read(objectIdMock.toString());
+        String expected = JsonUtility.serializeJson(responseMock);
+        assertEquals(expected, response);
     }
 
     @Test
     public void readResourceUrlsSucceeds() {
-        ObjectResource resource = new ObjectResource(serviceMock);
-        List<ResourceUrl> resourceUrlsMock = Arrays.asList(new ResourceUrl("UID", "PATH"));
         when(serviceMock.readResourceUrls(anyString())).thenReturn(resourceUrlsMock);
-        String actualResponse = resource.readResourceUrls();
-        String expectedResponse = JsonUtility.serializeJson(resourceUrlsMock);
-        assertEquals(expectedResponse, actualResponse);
+        String response = resource.readResourceUrls();
+        String expected = JsonUtility.serializeJson(resourceUrlsMock);
+        assertEquals(expected, response);
     }
 
     @Test
     public void deleteSucceeds() {
-        ObjectResource resource = new ObjectResource(serviceMock);
         doNothing().when(serviceMock).delete(anyString());
-        String uid = objectIdMock.toString();
-        resource.delete(uid);
+        resource.delete(objectIdMock.toString());
     }
 
 }

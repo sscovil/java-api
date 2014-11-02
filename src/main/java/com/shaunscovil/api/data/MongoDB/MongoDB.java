@@ -1,4 +1,4 @@
-package com.shaunscovil.api.data;
+package com.shaunscovil.api.data.mongodb;
 
 import com.mongodb.DB;
 import com.mongodb.MongoClient;

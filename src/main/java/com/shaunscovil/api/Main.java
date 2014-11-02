@@ -1,6 +1,6 @@
 package com.shaunscovil.api;
 
-import com.shaunscovil.api.data.MongoDB;
+import com.shaunscovil.api.data.mongodb.MongoDB;
 import org.glassfish.grizzly.http.server.HttpServer;
 
 import java.io.IOException;
