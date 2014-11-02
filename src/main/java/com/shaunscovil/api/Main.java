@@ -10,25 +10,20 @@ public class Main {
     public static final Properties PROPERTIES = Configuration.getProperties(Environment.DEVELOPMENT);
 
     public static void main(String[] args) throws IOException {
-        try {
-            initializeDB();
-            HttpServer server = Server.start();
+        initializeDB();
+        HttpServer server = startServer();
 
-            try {
-                Object lock = new Object();
-                synchronized (lock) {
-                    while (true) {
-                        lock.wait();
-                    }
+        try {
+            Object lock = new Object();
+            synchronized (lock) {
+                while (true) {
+                    lock.wait();
                 }
             }
-            catch (InterruptedException e) {
-                System.out.print("Service interrupted, shutting down now");
-                server.shutdownNow();
-            }
         }
-        catch (Exception e) {
-            throw new RuntimeException("Could not start server", e);
+        catch (InterruptedException e) {
+            System.out.print("Service interrupted, shutting down now");
+            server.shutdownNow();
         }
     }
 
@@ -38,6 +33,15 @@ public class Main {
         }
         catch (Exception e) {
             throw new RuntimeException("Could not initialize MongoDB singleton", e);
+        }
+    }
+
+    public static HttpServer startServer() {
+        try {
+            return Server.start();
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Could not start server", e);
         }
     }
 
