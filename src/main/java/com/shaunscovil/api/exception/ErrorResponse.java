@@ -36,9 +36,4 @@ public class ErrorResponse {
         return JsonUtility.serializeJson(this);
     }
 
-    @Override
-    public String toString() {
-        return String.format("ErrorResponse{verb='%s', url='%s', message='%s'}", verb, url, message);
-    }
-
 }
