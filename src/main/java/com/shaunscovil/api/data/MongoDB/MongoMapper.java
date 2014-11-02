@@ -20,19 +20,21 @@ public class MongoMapper<Type> {
         void put(String key, Object value);
     }
 
+    public MongoMapper() {
+        MAPPER.addMixInAnnotations(BasicDBObject.class, BasicDBObjectMixin.class);
+    }
+
     protected DBObject mapEntity(Type model) {
         if (model instanceof Map)
             return new BasicDBObject((Map) model);
 
-        MAPPER.addMixInAnnotations(BasicDBObject.class, BasicDBObjectMixin.class);
         return MAPPER.convertValue(model, BasicDBObject.class);
     }
 
     @SuppressWarnings("unchecked")
     protected Map<String, Object> mapResponse(DBObject entity) {
-        String uid = entity.get("_id").toString();
         Map<String, Object> response = new HashMap<>();
-        response.put("uid", uid);
+        response.put("uid", entity.get("_id").toString());
         response.putAll(entity.toMap());
         response.remove("_id");
 
