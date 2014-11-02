@@ -8,11 +8,11 @@ import java.net.URI;
 
 public class Server {
 
-    public static final String BASE_URI = Main.PROPERTIES.getProperty(Property.BASE_URI.key());
+    public static final String BASE_URI = Main.PROPERTIES.getProperty(Property.BASE_URI);
 
     public static HttpServer start() {
-        final ResourceConfig rc = new ResourceConfig().packages("com.shaunscovil.api");
-        return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
+        final ResourceConfig config = new ResourceConfig().packages("com.shaunscovil.api");
+        return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), config);
     }
 
 }

@@ -31,10 +31,10 @@ public class MongoDAO {
         String uid = model.get("uid").toString();
         ObjectId objectId = stringToObjectId(uid);
         DBObject query = collection.findOne(objectId);
-        checkNotFound(query);
+        handleNotFound(query);
         DBObject entity = new BasicDBObject("_id", objectId);
-        model.remove("uid");
         entity.putAll(model);
+        entity.removeField("uid");
         collection.update(query, entity);
 
         return buildResponse(entity);
@@ -43,7 +43,7 @@ public class MongoDAO {
     public Map<String, Object> read(String uid) {
         ObjectId objectId = stringToObjectId(uid);
         DBObject entity = collection.findOne(objectId);
-        checkNotFound(entity);
+        handleNotFound(entity);
 
         return buildResponse(entity);
     }
@@ -52,7 +52,7 @@ public class MongoDAO {
         DBObject query = new BasicDBObject();
         DBObject fields = new BasicDBObject("_id", 1);
         DBCursor cursor = collection.find(query, fields);
-        checkNotFound(cursor);
+        handleNotFound(cursor);
 
         List<ResourceUrl> response = new ArrayList<>();
 
@@ -83,12 +83,12 @@ public class MongoDAO {
         return response;
     }
 
-    protected void checkNotFound(DBObject entity) {
+    protected void handleNotFound(DBObject entity) {
         if (entity == null)
             throw new ApiException("Record not found", Response.Status.NOT_FOUND);
     }
 
-    protected void checkNotFound(DBCursor cursor) {
+    protected void handleNotFound(DBCursor cursor) {
         if (!cursor.hasNext())
             throw new ApiException("No records found", Response.Status.NOT_FOUND);
     }

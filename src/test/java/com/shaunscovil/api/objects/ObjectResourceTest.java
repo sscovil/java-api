@@ -18,7 +18,6 @@ import static org.mockito.Matchers.anyMapOf;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
-
 public class ObjectResourceTest {
 
     @Rule
@@ -46,6 +45,7 @@ public class ObjectResourceTest {
     @Test(expected = ApiException.class)
     public void createFailsInvalidJson() {
         ObjectResource resource = new ObjectResource(serviceMock);
+        when(serviceMock.create(anyMapOf(String.class, Object.class))).thenReturn(modelMock);
         String malformedJsonPayload = "{ foo: bar }";
         resource.create(malformedJsonPayload);
     }
@@ -64,6 +64,7 @@ public class ObjectResourceTest {
     @Test(expected = ApiException.class)
     public void updateFailsInvalidJson() {
         ObjectResource resource = new ObjectResource(serviceMock);
+        when(serviceMock.update(anyString(), anyMapOf(String.class, Object.class))).thenReturn(modelMock);
         String uid = objectIdMock.toString();
         String malformedJsonPayload = "{ foo: bar }";
         resource.update(uid, malformedJsonPayload);

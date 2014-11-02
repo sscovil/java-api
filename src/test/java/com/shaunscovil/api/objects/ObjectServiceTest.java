@@ -37,7 +37,7 @@ public class ObjectServiceTest {
     public ObjectId objectIdMock;
 
     @Test
-    public void createSucceeds() {
+    public void createSucceedsUidRemovedFromModel() {
         ObjectService service = new ObjectService(daoMock);
         Map<String, Object> model = new HashMap<>();
         model.put("uid", objectIdMock.toString());
@@ -49,11 +49,11 @@ public class ObjectServiceTest {
     }
 
     @Test
-    public void updateSucceeds() {
+    public void updateSucceedsUidAddedToModel() {
         ObjectService service = new ObjectService(daoMock);
         String uid = objectIdMock.toString();
         Map<String, Object> model = new HashMap<>();
-        model.put("uid", uid);
+        model.put("uid", "SHOULD BE REPLACED");
         model.put("foo", "bar");
         when(daoMock.update(anyMapOf(String.class, Object.class))).thenReturn(model);
         Map<String, Object> response = service.update(uid, model);

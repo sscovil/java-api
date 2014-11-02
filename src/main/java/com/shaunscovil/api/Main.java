@@ -4,7 +4,6 @@ import com.shaunscovil.api.data.MongoDB;
 import org.glassfish.grizzly.http.server.HttpServer;
 
 import java.io.IOException;
-import java.util.Properties;
 
 public class Main {
 

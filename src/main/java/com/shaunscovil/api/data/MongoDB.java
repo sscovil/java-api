@@ -39,13 +39,13 @@ public class MongoDB {
                 new MongoClient(serverAddress) :
                 new MongoClient(serverAddress, credentials);
 
-        final String dbname = Main.PROPERTIES.getProperty(Property.MONGODB_DB_NAME.key(), "test");
+        final String dbname = Main.PROPERTIES.getProperty(Property.MONGODB_DB_NAME, "test");
         this.database = mongoClient.getDB(dbname);
     }
 
     private ServerAddress getServerAddress() {
-        final String host = Main.PROPERTIES.getProperty(Property.MONGODB_HOST.key(), "localhost");
-        final Integer port = Integer.parseInt(Main.PROPERTIES.getProperty(Property.MONGODB_PORT.key(), "27017"));
+        final String host = Main.PROPERTIES.getProperty(Property.MONGODB_HOST, "localhost");
+        final Integer port = Integer.parseInt(Main.PROPERTIES.getProperty(Property.MONGODB_PORT, "27017"));
 
         try {
             return new ServerAddress(host, port);
@@ -56,9 +56,9 @@ public class MongoDB {
     }
 
     private List<MongoCredential> getCredentials() {
-        final String username = Main.PROPERTIES.getProperty(Property.MONGODB_USERNAME.key(), "root");
-        final String password = Main.PROPERTIES.getProperty(Property.MONGODB_PASSWORD.key(), "");
-        final String authdb = Main.PROPERTIES.getProperty(Property.MONGODB_AUTH_DB.key(), "admin");
+        final String username = Main.PROPERTIES.getProperty(Property.MONGODB_USERNAME, "root");
+        final String password = Main.PROPERTIES.getProperty(Property.MONGODB_PASSWORD, "");
+        final String authdb = Main.PROPERTIES.getProperty(Property.MONGODB_AUTH_DB, "admin");
 
         List<MongoCredential> credentials = new ArrayList<>();
         if (!password.isEmpty())
