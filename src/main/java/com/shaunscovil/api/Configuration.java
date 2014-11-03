@@ -13,7 +13,8 @@ public class Configuration {
             properties.load(inputStream);
         }
         catch (IOException e) {
-            e.printStackTrace();
+            String message = String.format("Could not load configuration file: %s", env.filename());
+            throw new RuntimeException(message, e);
         }
 
         return properties;

@@ -11,7 +11,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         initializeDB();
-        HttpServer server = startServer();
+        HttpServer server = Server.start();
 
         try {
             Object lock = new Object();
@@ -32,16 +32,7 @@ public class Main {
             MongoDB.getInstance();
         }
         catch (Exception e) {
-            throw new RuntimeException("Could not initialize MongoDB singleton", e);
-        }
-    }
-
-    public static HttpServer startServer() {
-        try {
-            return Server.start();
-        }
-        catch (Exception e) {
-            throw new RuntimeException("Could not start server", e);
+            throw new RuntimeException("Could not initialize MongoDB", e);
         }
     }
 
