@@ -106,8 +106,8 @@ stop on shutdown
 expect fork
 
 script
-    cd /var/www/API
-    java -jar /var/www/API/target/shaunscovil-api-1.0.0-SNAPSHOT.jar USERNAME >/var/log/api-shaunscovil.log 2>&1
+    cd {/PATH/TO/API}
+    java -jar {/PATH/TO/API}/target/shaunscovil-api-1.0.0-SNAPSHOT.jar {USERNAME} >/var/log/api-shaunscovil.log 2>&1
     emit rest-api_running
 end script
 ```
@@ -127,5 +127,5 @@ This is a hobby project that I intend to continue working on in my abundance of 
 * __Unit Testing.__ You can never have too many tests. Right now, I don't have enough. I definitely want to add code coverage for the data layer and common classes.
 * __Load Testing.__ The HTTP server has not been configured or optimized in any way, and I have not yet begun to beat on this thing to see how it handles concurrent requests.
 * __Authentication.__ Hello, world! I want to add support for Basic Auth, at the very least.
-* __Pagination.__ Right now, there is no upper limit to the number of results the `/api/read` endpoint returns. That could get messy.
-* __Advanced Queries.__ It would be really cool to enable users to query for objects that meet specific criteria (i.e. read filters).
+* __Pagination.__ Right now, there is no upper limit to the number of results the GET `/api/objects` endpoint returns. That could get messy.
+* __Advanced Queries.__ It would be really cool to enable users to query for objects that meet specific criteria.
