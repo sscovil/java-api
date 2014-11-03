@@ -12,11 +12,9 @@ public class Server {
 
     public static HttpServer start() {
         final ResourceConfig config = new ResourceConfig().packages("com.shaunscovil.api");
-        HttpServer server = GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), config);
 
         try {
-            server.start();
-            return server;
+            return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), config);
         }
         catch (Exception e) {
             throw new RuntimeException("Could not start server", e);
