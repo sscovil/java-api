@@ -5,7 +5,7 @@ import org.glassfish.grizzly.http.server.Request;
 
 import javax.ws.rs.container.ResourceContext;
 
-public class ErrorResponse {
+public class ApiExceptionEntity {
 
     protected String verb;
 
@@ -13,7 +13,7 @@ public class ErrorResponse {
 
     protected String message;
 
-    public ErrorResponse(ResourceContext resourceContext, String message) {
+    public ApiExceptionEntity(ResourceContext resourceContext, String message) {
         Request request = resourceContext.getResource(Request.class);
         this.verb = request.getMethod().toString();
         this.url = request.getRequestURL().toString();

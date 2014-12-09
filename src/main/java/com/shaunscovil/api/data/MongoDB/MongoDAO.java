@@ -74,6 +74,20 @@ public class MongoDAO<Type> implements DAO<Type> {
         return response;
     }
 
+    public List<Map<String, Object>> search(Map<String, Object> queryDictionary) {
+        DBObject query = BasicDBObjectBuilder.start(queryDictionary).get();
+        DBCursor cursor = collection.find(query);
+
+        List<Map<String, Object>> response = new ArrayList<>();
+
+        while (cursor.hasNext()) {
+            DBObject entity = cursor.next();
+            response.add(mapper.mapResponse(entity));
+        }
+
+        return response;
+    }
+
     public void delete(Object uid) {
         ObjectId objectId = mapper.mapObjectId(uid);
         DBObject query = new BasicDBObject("_id", objectId);
