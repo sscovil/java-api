@@ -7,7 +7,7 @@ public enum Environment {
     PRODUCTION;
 
     public String filename() {
-        return String.format("%s.properties", this.name().toLowerCase());
+        return String.format("configuration/%s.properties", this.name().toLowerCase());
     }
 
 }

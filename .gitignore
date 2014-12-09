@@ -1,4 +1,4 @@
 .idea/
 target/
-api-shaunscovil.conf
+rest-api.conf
 dependency-reduced-pom.xml

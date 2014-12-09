@@ -45,7 +45,7 @@ To build and run the API, you will need Java 1.7 and Maven 3.x installed. In add
 
 ### Configuration
 
-Located in `src/main/resources` are three configuration files:
+Located in `src/main/resources/configuration` are three configuration files:
 
 * `development.properties`
 * `staging.properties`
@@ -66,7 +66,7 @@ api.data.mongodb.dbname | The name of the MongoDB database to use. | `test`
 
 ### Environment
 
-In the Main method (`src/main/java/com/shaunscovil/api/Main.java`), look for the following on line 11:
+In the Main method (`src/main/java/com/shaunscovil/api/Main.java`), look for the following on line 10:
 
 ```
 public static final Properties PROPERTIES = Configuration.getProperties(Environment.DEVELOPMENT);

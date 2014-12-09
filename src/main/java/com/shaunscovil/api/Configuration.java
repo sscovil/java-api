@@ -5,15 +5,15 @@ import java.io.InputStream;
 
 public class Configuration {
 
-    public static Properties getProperties(Environment env) {
+    public static Properties getProperties(Environment environment) {
         Properties properties = new Properties();
 
         try {
-            InputStream inputStream = Configuration.class.getClassLoader().getResourceAsStream(env.filename());
+            InputStream inputStream = Configuration.class.getClassLoader().getResourceAsStream(environment.filename());
             properties.load(inputStream);
         }
         catch (IOException e) {
-            String message = String.format("Could not load configuration file: %s", env.filename());
+            String message = String.format("Could not load configuration file: %s", environment.filename());
             throw new RuntimeException(message, e);
         }
 
