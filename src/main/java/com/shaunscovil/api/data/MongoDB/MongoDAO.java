@@ -1,9 +1,9 @@
 package com.shaunscovil.api.data.mongodb;
 
 import com.mongodb.*;
-import com.shaunscovil.api.common.ResourceUrl;
+import com.shaunscovil.api.exception.APIException;
+import com.shaunscovil.api.resource.ResourceUrl;
 import com.shaunscovil.api.data.DAO;
-import com.shaunscovil.api.exception.ApiException;
 import org.bson.types.ObjectId;
 
 import javax.ws.rs.core.*;
@@ -96,12 +96,12 @@ public class MongoDAO<Type> implements DAO<Type> {
 
     protected void handleNotFound(DBObject entity) {
         if (entity == null)
-            throw new ApiException("Record not found", Response.Status.NOT_FOUND);
+            throw new APIException("Record not found", Response.Status.NOT_FOUND);
     }
 
     protected void handleNotFound(DBCursor cursor) {
         if (!cursor.hasNext())
-            throw new ApiException("No records found", Response.Status.NOT_FOUND);
+            throw new APIException("No records found", Response.Status.NOT_FOUND);
     }
 
 }

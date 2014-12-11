@@ -1,7 +1,6 @@
 package com.shaunscovil.api.exception;
 
 import com.shaunscovil.api.Main;
-import com.shaunscovil.api.Property;
 
 import javax.ws.rs.container.ResourceContext;
 import javax.ws.rs.core.Context;
@@ -12,18 +11,18 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class ApiExceptionMapper implements ExceptionMapper<ApiException> {
+public class APIExceptionMapper implements ExceptionMapper<APIException> {
 
     @Context
     protected ResourceContext resourceContext;
 
     @Override
-    public Response toResponse(ApiException e) {
-        Response.Status status    = e.getStatus();
+    public Response toResponse(APIException e) {
+        Response.Status status = e.getStatus();
 
         switch (status) {
             case UNAUTHORIZED:
-                String header = String.format("Basic realm=\"%s\"", Main.PROPERTIES.getProperty(Property.BASE_URI));
+                String header = String.format("Basic realm=\"%s\"", Main.apiConfig.getProperty("baseURI"));
                 return Response.status(status)
                         .header(HttpHeaders.WWW_AUTHENTICATE, header)
                         .entity("<html><body><h1>401 Unauthorized</h1></body></html>")
@@ -31,7 +30,7 @@ public class ApiExceptionMapper implements ExceptionMapper<ApiException> {
                         .build();
 
             default:
-                ApiExceptionEntity entity = new ApiExceptionEntity(resourceContext, e.getMessage());
+                APIExceptionResponse entity = new APIExceptionResponse(resourceContext, e.getMessage());
                 return Response.status(e.getStatus())
                         .entity(entity.toJson())
                         .type(MediaType.APPLICATION_JSON)

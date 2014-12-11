@@ -1,6 +1,6 @@
-package com.shaunscovil.api.common;
+package com.shaunscovil.api.resource;
 
-import com.shaunscovil.api.Server;
+import com.shaunscovil.api.http.Server;
 
 public class ResourceUrl {
 

@@ -1,6 +1,7 @@
 package com.shaunscovil.api.status;
 
-import com.shaunscovil.api.Server;
+import com.shaunscovil.api.http.Server;
+import com.shaunscovil.api.resource.StatusResource;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.junit.After;
 import org.junit.Before;

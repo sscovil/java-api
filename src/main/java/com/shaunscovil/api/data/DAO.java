@@ -1,6 +1,6 @@
 package com.shaunscovil.api.data;
 
-import com.shaunscovil.api.common.ResourceUrl;
+import com.shaunscovil.api.resource.ResourceUrl;
 
 import java.util.List;
 import java.util.Map;

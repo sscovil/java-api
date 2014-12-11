@@ -1,11 +1,11 @@
 package com.shaunscovil.api.exception;
 
-import com.shaunscovil.api.common.JsonUtility;
+import com.shaunscovil.api.resource.ResourceIOMapper;
 import org.glassfish.grizzly.http.server.Request;
 
 import javax.ws.rs.container.ResourceContext;
 
-public class ApiExceptionEntity {
+public class APIExceptionResponse {
 
     protected String verb;
 
@@ -13,7 +13,7 @@ public class ApiExceptionEntity {
 
     protected String message;
 
-    public ApiExceptionEntity(ResourceContext resourceContext, String message) {
+    public APIExceptionResponse(ResourceContext resourceContext, String message) {
         Request request = resourceContext.getResource(Request.class);
         this.verb = request.getMethod().toString();
         this.url = request.getRequestURL().toString();
@@ -33,7 +33,7 @@ public class ApiExceptionEntity {
     }
 
     public String toJson() {
-        return JsonUtility.serializeJson(this);
+        return ResourceIOMapper.serializeJson(this);
     }
 
 }

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import com.shaunscovil.api.exception.ApiException;
+import com.shaunscovil.api.exception.APIException;
 import org.bson.types.ObjectId;
 
 import javax.ws.rs.core.Response;
@@ -46,7 +46,7 @@ public class MongoMapper<Type> {
             return new ObjectId(uid.toString());
         }
         catch (IllegalArgumentException e) {
-            throw new ApiException(String.format("'%s' is not a valid UID", uid), Response.Status.BAD_REQUEST);
+            throw new APIException(String.format("'%s' is not a valid UID", uid), Response.Status.BAD_REQUEST);
         }
     }
 

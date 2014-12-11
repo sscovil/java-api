@@ -1,6 +1,8 @@
-package com.shaunscovil.api;
+package com.shaunscovil.api.http;
 
-import com.shaunscovil.api.auth.AuthFilter;
+import com.shaunscovil.api.Main;
+import com.shaunscovil.api.authentication.AuthenticationFilter;
+import com.shaunscovil.api.resource.DynamicResourceConfig;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -10,12 +12,12 @@ import java.net.URI;
 
 public class Server {
 
-    public static final String BASE_URI = Main.PROPERTIES.getProperty(Property.BASE_URI);
+    public static final String BASE_URI = Main.apiConfig.getProperty("baseURI");
 
-    public static final ResourceConfig CONFIG = new ResourceConfig().packages("com.shaunscovil.api");
+    public static final ResourceConfig CONFIG = new DynamicResourceConfig().packages("com.shaunscovil.api");
 
     public static HttpServer start() {
-        CONFIG.register(AuthFilter.class, ContainerRequestFilter.class);
+        CONFIG.register(AuthenticationFilter.class, ContainerRequestFilter.class);
 
         try {
             return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), CONFIG);

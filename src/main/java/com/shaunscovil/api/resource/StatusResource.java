@@ -1,4 +1,4 @@
-package com.shaunscovil.api.status;
+package com.shaunscovil.api.resource;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

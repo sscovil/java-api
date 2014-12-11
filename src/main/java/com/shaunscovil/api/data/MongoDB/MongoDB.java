@@ -1,18 +1,17 @@
 package com.shaunscovil.api.data.mongodb;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.shaunscovil.api.Main;
-import com.shaunscovil.api.Property;
-import com.shaunscovil.api.exception.ApiException;
 
 import javax.inject.Singleton;
-import javax.ws.rs.core.Response;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Singleton
 public class MongoDB {
@@ -23,7 +22,7 @@ public class MongoDB {
         return MongoDB.getInstance().database;
     }
 
-    public synchronized static MongoDB getInstance() {
+    public static MongoDB getInstance() {
         return MongoDBHolder.INSTANCE;
     }
 
@@ -32,39 +31,49 @@ public class MongoDB {
     }
 
     private MongoDB() {
-        ServerAddress serverAddress = getServerAddress();
         List<MongoCredential> credentials = getCredentials();
+        List<ServerAddress> serverAddress = getServerAddress();
 
-        MongoClient mongoClient = credentials.isEmpty() ?
-                new MongoClient(serverAddress) :
+        MongoClient mongoClient = Boolean.valueOf(Main.apiConfig.getProperty("data.mongoDB.standalone")) ?
+                new MongoClient(serverAddress.get(0), credentials):
                 new MongoClient(serverAddress, credentials);
 
-        final String dbname = Main.PROPERTIES.getProperty(Property.MONGODB_DB_NAME, "test");
-        this.database = mongoClient.getDB(dbname);
-    }
-
-    private ServerAddress getServerAddress() {
-        final String host = Main.PROPERTIES.getProperty(Property.MONGODB_HOST, "localhost");
-        final Integer port = Integer.parseInt(Main.PROPERTIES.getProperty(Property.MONGODB_PORT, "27017"));
-
-        try {
-            return new ServerAddress(host, port);
-        } catch (UnknownHostException e) {
-            String message = String.format("Unknown host %s:%s", host, port);
-            throw new ApiException(message, Response.Status.INTERNAL_SERVER_ERROR);
-        }
+        this.database = mongoClient.getDB(Main.apiConfig.getProperty("data.mongoDB.dbname"));
     }
 
     private List<MongoCredential> getCredentials() {
-        final String username = Main.PROPERTIES.getProperty(Property.MONGODB_USERNAME, "root");
-        final String password = Main.PROPERTIES.getProperty(Property.MONGODB_PASSWORD, "");
-        final String authdb = Main.PROPERTIES.getProperty(Property.MONGODB_AUTH_DB, "admin");
-
+        TypeReference<List<Map<String, String>>> typeReference = new TypeReference<List<Map<String, String>>>() {};
+        List<Map<String, String>> properties = Main.apiConfig.getProperty("data.mongoDB.credentials", typeReference);
         List<MongoCredential> credentials = new ArrayList<>();
-        if (!password.isEmpty())
-            credentials.add(MongoCredential.createMongoCRCredential(username, authdb, password.toCharArray()));
+
+        for (Map<String, String> property : properties) {
+            String username = property.get("username");
+            String password = property.get("password");
+            String authDB = property.get("authDB");
+            credentials.add(MongoCredential.createMongoCRCredential(username, authDB, password.toCharArray()));
+        }
 
         return credentials;
+    }
+
+    private List<ServerAddress> getServerAddress() {
+        TypeReference<List<Map<String, String>>> typeReference = new TypeReference<List<Map<String, String>>>() {};
+        List<Map<String, String>> properties = Main.apiConfig.getProperty("data.mongoDB.servers", typeReference);
+        List<ServerAddress> serverAddresses = new ArrayList<>();
+
+        for (Map<String, String> property : properties) {
+            String host = property.get("host");
+            Integer port = Integer.parseInt(property.get("port"));
+
+            try {
+                serverAddresses.add(new ServerAddress(host, port));
+            }
+            catch (UnknownHostException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+
+        return serverAddresses;
     }
 
 }

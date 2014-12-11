@@ -2,11 +2,11 @@ package com.shaunscovil.api.exception;
 
 import javax.ws.rs.core.Response;
 
-public class ApiException extends RuntimeException {
+public class APIException extends RuntimeException {
 
     private Response.Status status;
 
-    public ApiException(String message, Response.Status status) {
+    public APIException(String message, Response.Status status) {
         super(message);
         this.status = status;
     }

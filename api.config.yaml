@@ -1,0 +1,12 @@
+baseURI : http://api.shaunscovil.com
+data :
+    mongoDB :
+        standalone : true
+        dbname     : test
+        servers :
+            - host : localhost
+              port : 27017
+        credentials :
+            - username : root
+              password :
+              authDB   : admin

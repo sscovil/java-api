@@ -1,8 +1,8 @@
-package com.shaunscovil.api.auth;
+package com.shaunscovil.api.authentication;
 
 import com.shaunscovil.api.data.DAO;
 import com.shaunscovil.api.data.mongodb.MongoDAO;
-import com.shaunscovil.api.exception.ApiException;
+import com.shaunscovil.api.exception.APIException;
 import com.sun.xml.internal.messaging.saaj.util.Base64;
 
 import javax.ws.rs.container.ContainerRequestContext;
@@ -13,18 +13,18 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class AuthFilter implements ContainerRequestFilter {
+public class AuthenticationFilter implements ContainerRequestFilter {
 
     protected static final String COLLECTION_NAME = "users";
 
     protected static final Set<String> PUBLIC_RESOURCES = new HashSet<>();
 
-    public AuthFilter() {
+    public AuthenticationFilter() {
         PUBLIC_RESOURCES.add("GET.status");
     }
 
     @Override
-    public void filter(ContainerRequestContext containerRequest) throws ApiException {
+    public void filter(ContainerRequestContext containerRequest) throws APIException {
         String method = containerRequest.getMethod();
         String path = containerRequest.getUriInfo().getPath(true);
         String resource = String.format("%s.%s", method, path);
@@ -35,7 +35,7 @@ public class AuthFilter implements ContainerRequestFilter {
         if (basicAuthSucceeds(basicAuthCredentials))
             return;
 
-        throw new ApiException("Login required", Response.Status.UNAUTHORIZED);
+        throw new APIException("Login required", Response.Status.UNAUTHORIZED);
     }
 
     private boolean basicAuthSucceeds(String credentials) {

@@ -55,7 +55,7 @@ Each file has the follow properties:
 
 name | description | default value
 -----|-------------|--------------
-api.baseURI | The base URI for the application (ex: `http://api.shaunscovil.com/api`). | Required (no default).
+api.baseURI | The base URI for the application (ex: `http://api.shaunscovil.com`). | Required (no default).
 api.data.mongodb.host | The hostname or IP address of your MongoDB instance. | `localhost`
 api.data.mongodb.port | The port number of your MongoDB instance. | `27017`
 api.data.mongodb.username | MongoDB username with read/write access to the dbname specified. | `root`
